@@ -8,9 +8,9 @@ const horizontalMenuData = (): HorizontalMenuDataType[] => [
     icon: 'ri-home-smile-line'
   },
   {
-    label: 'About',
-    href: '/about',
-    icon: 'ri-information-line'
+    label: 'Knowledge Base',
+    href: '/knowledge-base',
+    icon: 'bi:database-fill-gear'
   }
 ]
 

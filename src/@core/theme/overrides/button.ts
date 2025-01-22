@@ -29,6 +29,9 @@ const button: Theme['components'] = {
     }
   },
   MuiButton: {
+    defaultProps: {
+      variant: 'contained'
+    },
     styleOverrides: {
       root: ({ theme, ownerState }) => ({
         ...(ownerState.variant === 'text'

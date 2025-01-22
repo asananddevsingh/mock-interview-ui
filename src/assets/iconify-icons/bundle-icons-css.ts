@@ -61,6 +61,18 @@ const sources: BundleScriptConfig = {
     // Iconify JSON file (@iconify/json is a package name, /json/ is directory where files are, then filename)
     require.resolve('@iconify/json/json/ri.json'),
 
+    // bi icons
+    require.resolve('@iconify/json/json/bi.json'),
+
+    // material-symbols
+    require.resolve('@iconify/json/json/material-symbols.json'),
+
+    // uil
+    require.resolve('@iconify/json/json/uil.json'),
+
+    // carbon
+    require.resolve('@iconify/json/json/carbon.json'),
+
     // Custom file with only few icons
     {
       filename: require.resolve('@iconify/json/json/line-md.json'),

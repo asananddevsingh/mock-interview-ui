@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const api = axios.create({
   // baseURL: 'https://jsonplaceholder.typicode.com',
-  baseURL: 'https://r1vsf5jut3.execute-api.eu-north-1.amazonaws.com/dev',
+  baseURL: 'https://r1vsf5jut3.execute-api.eu-north-1.amazonaws.com/DEV',
   headers: {
     'Content-Type': 'application/json'
   }

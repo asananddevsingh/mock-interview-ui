@@ -27,7 +27,7 @@ type LogoTextProps = {
 }
 
 const LogoText = styled.span<LogoTextProps>`
-  font-size: 1.25rem;
+  font-size: 1rem;
   line-height: 1.2;
   font-weight: 600;
   letter-spacing: 0.15px;
