@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const api = axios.create({
+//-================= Lokesh
+const apiLokesh = axios.create({
   // baseURL: 'https://jsonplaceholder.typicode.com',
   baseURL: 'https://r1vsf5jut3.execute-api.eu-north-1.amazonaws.com/DEV',
   headers: {
@@ -8,9 +9,9 @@ const api = axios.create({
   }
 })
 
-const request = async (method: string, url: string, data?: any, config?: any) => {
+export const requestLokesh = async (method: string, url: string, data?: any, config?: any) => {
   try {
-    const response = await api({
+    const response = await apiLokesh({
       method,
       url,
       data,
@@ -23,10 +24,38 @@ const request = async (method: string, url: string, data?: any, config?: any) =>
   }
 }
 
-export const apiGet = (url: string, config?: any) => request('GET', url, null, config)
-export const apiPost = (url: string, data: any, config?: any) => request('POST', url, data, config)
-export const apiPut = (url: string, data: any, config?: any) => request('PUT', url, data, config)
-export const apiPatch = (url: string, data: any, config?: any) => request('PATCH', url, data, config)
-export const apiDeleteRequest = (url: string, config?: any) => request('DELETE', url, null, config)
+export const apiLokeshGet = (url: string, config?: any) => requestLokesh('GET', url, null, config)
+export const apiLokeshPost = (url: string, data: any, config?: any) => requestLokesh('POST', url, data, config)
+export const apiLokeshPut = (url: string, data: any, config?: any) => requestLokesh('PUT', url, data, config)
+export const apiLokeshPatch = (url: string, data: any, config?: any) => requestLokesh('PATCH', url, data, config)
+export const apiLokeshDeleteRequest = (url: string, config?: any) => requestLokesh('DELETE', url, null, config)
 
-export default request
+//-================= Anurag
+
+const apiAnurag = axios.create({
+  baseURL: 'https://tt7edl9tqg.execute-api.ap-south-1.amazonaws.com/dev',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+
+export const requestAnurag = async (method: string, url: string, data?: any, config?: any) => {
+  try {
+    const response = await apiAnurag({
+      method,
+      url,
+      data,
+      ...config
+    })
+
+    return response.data
+  } catch (error) {
+    throw error
+  }
+}
+
+export const apiAnuragGet = (url: string, config?: any) => requestAnurag('GET', url, null, config)
+export const apiAnuragPost = (url: string, data: any, config?: any) => requestAnurag('POST', url, data, config)
+export const apiAnuragPut = (url: string, data: any, config?: any) => requestAnurag('PUT', url, data, config)
+export const apiAnuragPatch = (url: string, data: any, config?: any) => requestAnurag('PATCH', url, data, config)
+export const apiAnuragDeleteRequest = (url: string, config?: any) => requestAnurag('DELETE', url, null, config)

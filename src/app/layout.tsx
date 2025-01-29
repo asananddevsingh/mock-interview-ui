@@ -11,9 +11,8 @@ import '@/app/globals.css'
 import '@assets/iconify-icons/generated-icons.css'
 
 export const metadata = {
-  title: 'Materio - Material Design Next.js Admin Template',
-  description:
-    'Materio - Material Design Next.js Admin Dashboard Template - is the most developer friendly & highly customizable Admin Dashboard Template based on MUI v5.'
+  title: 'Mock Interview',
+  description: 'Mock Interview'
 }
 
 const RootLayout = ({ children }: ChildrenType) => {

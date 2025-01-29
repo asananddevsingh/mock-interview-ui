@@ -13,6 +13,8 @@ import {
   FormLabel
 } from '@mui/material'
 
+import { apiLokeshPost } from '@/utils/axiosUtils'
+
 interface QuestionFormValues {
   technology: string
   question: string
@@ -22,7 +24,7 @@ interface QuestionFormValues {
   reference: string
 }
 
-const QuestionDialog = () => {
+const QuestionDialog = (props: { seqNum: number }) => {
   const [open, setOpen] = useState(false)
 
   const [values, setValues] = useState<QuestionFormValues>({
@@ -46,9 +48,22 @@ const QuestionDialog = () => {
     setValues({ ...values, [event.target.name]: event.target.value })
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    console.log(values)
+  const handleSubmit = async () => {
+    console.log('Values:', values)
+
+    const payload = {
+      'Serial Number': props.seqNum,
+      Technology: values.technology,
+      Question: values.question,
+      Answer: values.answer,
+      Category: values.category,
+      Difficulty: values.difficulty,
+      Reference: values.reference
+    }
+
+    const response = await apiLokeshPost('/addquestion', { newObject: payload })
+
+    console.log('response', response)
   }
 
   return (
@@ -56,87 +71,90 @@ const QuestionDialog = () => {
       <Button color='primary' onClick={handleOpen}>
         Add Question
       </Button>
+
       <Dialog open={open} onClose={handleClose} maxWidth={'md'}>
         <DialogTitle>Add Question</DialogTitle>
         <DialogContent>
-          <form onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-              <Grid item xs={3}>
-                <FormLabel>Technology</FormLabel>
-                <TextField
-                  fullWidth
-                  name='technology'
-                  placeholder='JavaScript'
-                  value={values.technology}
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={3}>
-                <FormLabel>Category</FormLabel>
-                <TextField
-                  fullWidth
-                  name='category'
-                  placeholder='Data Structure'
-                  value={values.category}
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={3}>
-                <FormLabel>Difficulty</FormLabel>
-                <Select
-                  fullWidth
-                  name='difficulty'
-                  placeholder='Easy'
-                  value={values.difficulty}
-                  onChange={handleChange}
-                >
-                  <MenuItem value='Easy' defaultChecked>
-                    Easy
-                  </MenuItem>
-                  <MenuItem value='Medium'>Medium</MenuItem>
-                  <MenuItem value='Hard'>Hard</MenuItem>
-                </Select>
-              </Grid>
-              <Grid item xs={3}>
-                <FormLabel>Reference</FormLabel>
-                <TextField
-                  fullWidth
-                  name='reference'
-                  placeholder='https://w3schools.com'
-                  value={values.reference}
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormLabel>Question</FormLabel>
-                <TextField
-                  fullWidth
-                  name='question'
-                  placeholder='What is JavaScript?'
-                  value={values.question}
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormLabel>Answer</FormLabel>
-                <TextField
-                  fullWidth
-                  name='answer'
-                  placeholder='JavaScript is a programming language.'
-                  value={values.answer}
-                  onChange={handleChange}
-                />
-              </Grid>
+          <Grid container spacing={2}>
+            <Grid item xs={3}>
+              <FormLabel>Technology</FormLabel>
+              <TextField
+                size='small'
+                fullWidth
+                name='technology'
+                placeholder='JavaScript'
+                value={values.technology}
+                onChange={handleChange}
+              />
             </Grid>
-          </form>
+            <Grid item xs={3}>
+              <FormLabel>Category</FormLabel>
+              <TextField
+                size='small'
+                fullWidth
+                name='category'
+                placeholder='Data Structure'
+                value={values.category}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <FormLabel>Difficulty</FormLabel>
+              <Select
+                size='small'
+                fullWidth
+                name='difficulty'
+                placeholder='Easy'
+                value={values.difficulty}
+                onChange={handleChange}
+              >
+                <MenuItem value='Easy' defaultChecked>
+                  Easy
+                </MenuItem>
+                <MenuItem value='Medium'>Medium</MenuItem>
+                <MenuItem value='Hard'>Hard</MenuItem>
+              </Select>
+            </Grid>
+            <Grid item xs={3}>
+              <FormLabel>Reference</FormLabel>
+              <TextField
+                size='small'
+                fullWidth
+                name='reference'
+                placeholder='https://w3schools.com'
+                value={values.reference}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormLabel>Question</FormLabel>
+              <TextField
+                size='small'
+                fullWidth
+                name='question'
+                placeholder='What is JavaScript?'
+                value={values.question}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormLabel>Answer</FormLabel>
+              <TextField
+                size='small'
+                fullWidth
+                name='answer'
+                placeholder='JavaScript is a programming language.'
+                value={values.answer}
+                onChange={handleChange}
+              />
+            </Grid>
+          </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color='primary' variant='outlined'>
+          <Button onClick={handleClose} variant='outlined'>
             Cancel
           </Button>
-          <Button type='submit' form='question-form' color='primary'>
-            Add
-          </Button>
+          <Button onClick={handleSubmit}>Add</Button>
         </DialogActions>
       </Dialog>
     </div>

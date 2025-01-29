@@ -7,7 +7,7 @@ import type { GridColDef } from '@mui/x-data-grid'
 import { DataGrid } from '@mui/x-data-grid'
 import Paper from '@mui/material/Paper'
 
-import { apiGet } from '@/utils/axiosUtils'
+import { apiLokeshGet } from '@/utils/axiosUtils'
 import QuestionDialog from './QuestionDialog'
 
 const columns: GridColDef[] = [
@@ -36,15 +36,23 @@ export default function Page() {
   const getKnowledgeBase = async () => {
     setLoading(true)
 
-    const data = await apiGet('/knowledgebase', {
+    const data = await apiLokeshGet('/knowledgebase', {
       question: 'What is your favorite color?',
       correct_answer: 'Blue',
       user_answer: 'Blue'
     })
 
-    setKnowledgeBase(JSON.parse(data.body).data)
+    if (JSON.parse(data.body).data) {
+      const rawData = JSON.parse(data.body).data
 
-    console.log('JSON.parse(data.body).data', JSON.parse(data.body).data)
+      console.log('rawData', rawData)
+
+      const sorted = rawData.sort((a: any, b: any) => a['Serial Number'] - b['Serial Number'])
+
+      console.log('sorted', sorted)
+
+      setKnowledgeBase(sorted)
+    }
 
     setLoading(false)
   }
@@ -57,14 +65,13 @@ export default function Page() {
     <Paper className='p-4 flex flex-col gap-4'>
       <Box className='flex justify-between'>
         <Typography variant='h4'>Knowledge Base</Typography>
-        <QuestionDialog />
+        <QuestionDialog seqNum={knowledgeBase.length + 1} />
       </Box>
       <DataGrid
         rows={knowledgeBase}
         columns={columns}
         initialState={{ pagination: { paginationModel: { page: 0, pageSize: 10 } } }}
         pageSizeOptions={[5, 10, 20, 50]}
-        checkboxSelection
         sx={{ border: 0 }}
         loading={loading}
         getRowId={row => row['Serial Number'].toString()}

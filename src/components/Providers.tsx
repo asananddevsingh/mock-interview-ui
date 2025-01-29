@@ -1,4 +1,5 @@
 // Type Imports
+
 import type { ChildrenType, Direction } from '@core/types'
 
 // Context Imports
@@ -8,6 +9,7 @@ import ThemeProvider from '@components/theme'
 
 // Util Imports
 import { getDemoName, getMode, getSettingsFromCookie, getSystemMode } from '@core/utils/serverHelpers'
+import AppReactToastify from '@/@core/styles/AppReactToastify'
 
 type Props = ChildrenType & {
   direction: Direction
@@ -28,6 +30,8 @@ const Providers = (props: Props) => {
       <SettingsProvider settingsCookie={settingsCookie} mode={mode} demoName={demoName}>
         <ThemeProvider direction={direction} systemMode={systemMode}>
           {children}
+
+          <AppReactToastify position={'top-right'} hideProgressBar rtl={direction === 'rtl'} />
         </ThemeProvider>
       </SettingsProvider>
     </VerticalNavProvider>

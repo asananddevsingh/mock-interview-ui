@@ -73,9 +73,6 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
         renderExpandedMenuItemIcon={{ icon: <i className='ri-circle-line' /> }}
         menuSectionStyles={menuSectionStyles(verticalNavOptions, theme)}
       >
-        <MenuItem href='/home' icon={<i className='ri-home-smile-line' />}>
-          Home
-        </MenuItem>
         <MenuItem href='/knowledge-base' icon={<i className='bi-database-fill-gear' />}>
           Knowledge Base
         </MenuItem>
@@ -86,7 +83,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
           Schedule Interview
         </MenuItem>
         <MenuItem href='/evaluation' icon={<i className='carbon-chart-evaluation' />}>
-          Evaluation
+          Evaluation Result
         </MenuItem>
       </Menu>
       {/* <Menu
