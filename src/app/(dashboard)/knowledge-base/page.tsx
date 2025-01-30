@@ -18,15 +18,6 @@ const columns: GridColDef[] = [
   { field: 'category', headerName: 'Category', width: 130 },
   { field: 'difficulty', headerName: 'Difficulty', width: 130 },
   { field: 'reference', headerName: 'Reference', width: 130 }
-
-  // {
-  //   field: 'fullName',
-  //   headerName: 'Full name',
-  //   description: 'This column has a value getter and is not sortable.',
-  //   sortable: false,
-  //   width: 160,
-  //   valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`
-  // }
 ]
 
 export default function Page() {
@@ -51,11 +42,15 @@ export default function Page() {
     getKnowledgeBase()
   }, [])
 
+  const handlePopupClose = () => {
+    getKnowledgeBase()
+  }
+
   return (
     <Paper className='p-4 flex flex-col gap-4'>
       <Box className='flex justify-between'>
         <Typography variant='h4'>Knowledge Base</Typography>
-        <QuestionDialog seqNum={knowledgeBase.length + 1} />
+        <QuestionDialog seqNum={knowledgeBase.length + 1} onClose={handlePopupClose} />
       </Box>
       <DataGrid
         rows={knowledgeBase}

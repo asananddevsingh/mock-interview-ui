@@ -26,7 +26,7 @@ interface QuestionFormValues {
   reference: string
 }
 
-const QuestionDialog = (props: { seqNum: number }) => {
+const QuestionDialog = (props: any) => {
   const [open, setOpen] = useState(false)
 
   const [values, setValues] = useState<QuestionFormValues>({
@@ -44,6 +44,7 @@ const QuestionDialog = (props: { seqNum: number }) => {
 
   const handleClose = () => {
     setOpen(false)
+    props.onClose()
   }
 
   const handleChange = (event: any) => {
@@ -52,7 +53,6 @@ const QuestionDialog = (props: { seqNum: number }) => {
 
   const handleSubmit = async () => {
     const payload = {
-      serialNumber: props.seqNum,
       technology: values.technology,
       question: values.question,
       answer: values.answer,
@@ -61,7 +61,7 @@ const QuestionDialog = (props: { seqNum: number }) => {
       reference: values.reference
     }
 
-    const response = await apiAnuragPost('/question', { newObject: payload })
+    const response = await apiAnuragPost('/question', payload)
 
     if (response) {
       toast.success('Question added successfully')
