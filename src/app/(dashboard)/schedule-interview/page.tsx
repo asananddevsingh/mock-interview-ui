@@ -25,8 +25,13 @@ const columns: GridColDef[] = [
       const candidateId = params.row.id
       const link = window.location.origin + `/evaluate-candidate/${candidateId}`
 
+      const handleCopy = () => {
+        navigator.clipboard.writeText(link)
+        toast.success('Invite copied to clipboard, Share with the candidate.')
+      }
+
       return (
-        <Button size={'small'} variant='contained' onClick={() => navigator.clipboard.writeText(link)}>
+        <Button size={'small'} variant='contained' onClick={handleCopy}>
           Copy Invite
         </Button>
       )

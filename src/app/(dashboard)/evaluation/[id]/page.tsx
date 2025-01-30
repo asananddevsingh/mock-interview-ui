@@ -48,6 +48,7 @@ const EvaluateResult = ({ params: { id } }: { params: { id: string } }) => {
   if (!loading && data?.report?.length === 0) {
     return (
       <Box className='flex flex-col items-center justify-center  gap-4 w-full'>
+        <Typewriter text='Candidate has yet not taken the test.' />
         <Button
           variant='outlined'
           onClick={() => window.history.back()}
@@ -55,7 +56,6 @@ const EvaluateResult = ({ params: { id } }: { params: { id: string } }) => {
         >
           Go Back
         </Button>
-        <Typewriter text='Candidate yet not taken the test.' />
       </Box>
     )
   }
