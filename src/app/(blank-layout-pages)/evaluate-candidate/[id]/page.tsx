@@ -6,12 +6,12 @@ import { Box, Typography, TextField, Button, CircularProgress } from '@mui/mater
 import { toast } from 'react-toastify'
 
 import Typewriter from '@/components/Typewriter/Typewriter'
-import { apiAnuragPost } from '@/utils/axiosUtils'
+import { apiAnuragGet, apiAnuragPost } from '@/utils/axiosUtils'
 
 const EvaluateCandidate = ({ params: { id } }: { params: { id: string } }) => {
   console.log('id', id)
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [loadingNext, setLoadingNext] = useState(false)
   const [questions, setQuestions] = useState<any[]>([])
 
@@ -23,47 +23,53 @@ const EvaluateCandidate = ({ params: { id } }: { params: { id: string } }) => {
     const getData = async () => {
       setLoading(true)
 
-      // const data = await apiAnuragGet('/questions')
+      const data = await apiAnuragGet(`/question/byJob/${id}`)
+
+      console.log('data', data)
+
+      if (data) {
+        setQuestions(data)
+      }
 
       // console.log('data', data)
 
       setLoading(false)
 
-      setQuestions([
-        {
-          serialNumber: 1,
-          technology: 'JavaScript',
-          question: 'What is JavaScript?',
-          answer: 'JavaScript is a high-level, interpreted programming language used to make web pages interactive.',
-          category: 'Basics',
-          difficulty: 'Easy',
-          reference: 'MDN Web Docs'
-        },
-        {
-          serialNumber: 124,
-          technology: 'JavaScript',
-          question: 'Explain closures in JavaScript.',
-          answer:
-            "A closure is a function that has access to its outer function's scope, even after the outer function has finished executing.",
-          category: 'Functions',
-          difficulty: 'Medium',
-          reference: 'MDN Web Docs'
-        },
-        {
-          serialNumber: 125,
-          technology: 'JavaScript',
-          question: 'What are promises in JavaScript?',
-          answer:
-            'Promises are objects that represent the eventual completion or failure of an asynchronous operation and its resulting value.',
-          category: 'Asynchronous',
-          difficulty: 'Medium',
-          reference: 'JavaScript.info'
-        }
-      ])
+      // setQuestions([
+      //   {
+      //     serialNumber: 1,
+      //     technology: 'JavaScript',
+      //     question: 'What is JavaScript?',
+      //     answer: 'JavaScript is a high-level, interpreted programming language used to make web pages interactive.',
+      //     category: 'Basics',
+      //     difficulty: 'Easy',
+      //     reference: 'MDN Web Docs'
+      //   },
+      //   {
+      //     serialNumber: 124,
+      //     technology: 'JavaScript',
+      //     question: 'Explain closures in JavaScript.',
+      //     answer:
+      //       "A closure is a function that has access to its outer function's scope, even after the outer function has finished executing.",
+      //     category: 'Functions',
+      //     difficulty: 'Medium',
+      //     reference: 'MDN Web Docs'
+      //   },
+      //   {
+      //     serialNumber: 125,
+      //     technology: 'JavaScript',
+      //     question: 'What are promises in JavaScript?',
+      //     answer:
+      //       'Promises are objects that represent the eventual completion or failure of an asynchronous operation and its resulting value.',
+      //     category: 'Asynchronous',
+      //     difficulty: 'Medium',
+      //     reference: 'JavaScript.info'
+      //   }
+      // ])
     }
 
     getData()
-  }, [])
+  }, [id])
 
   const handleAnswerChange = (event: any) => {
     const newAnswers = { ...answers }
@@ -106,7 +112,7 @@ const EvaluateCandidate = ({ params: { id } }: { params: { id: string } }) => {
     )
   }
 
-  if (loading || !questions.length) {
+  if (loading) {
     return (
       <Box className='flex items-center justify-center h-full w-full'>
         <CircularProgress size={80} />
@@ -114,11 +120,22 @@ const EvaluateCandidate = ({ params: { id } }: { params: { id: string } }) => {
     )
   }
 
+  if (!loading && !questions.length) {
+    return (
+      <Box className='flex items-center justify-center h-[50%] w-full'>
+        <h4>
+          This seems to be an invalid invite. Please contact @ <span className='text-primary'>support@iris.com</span>
+        </h4>
+      </Box>
+    )
+  }
+
   return (
     <Box className='p-8'>
+      <h2>Best of luck.</h2>
       <form onSubmit={handleSubmit}>
         <Box sx={{ mb: 2, display: 'flex', justifyContent: 'flex-end' }}>
-          <Typography variant='h4'>
+          <Typography variant='h3'>
             Question {currentQuestion + 1} of {questions.length}
           </Typography>
         </Box>

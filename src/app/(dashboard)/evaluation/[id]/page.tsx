@@ -60,12 +60,27 @@ const EvaluateResult = ({ params: { id } }: { params: { id: string } }) => {
     )
   }
 
+  const getAccuracy = () => {
+    const totalScore = data.report?.reduce((n, { accuracyScore }) => n + accuracyScore, 0)
+
+    return Number(totalScore / data.report.length).toFixed(2)
+  }
+
+  const getCompletness = () => {
+    const totalScore = data.report?.reduce((n, { completenessScore }) => n + completenessScore, 0)
+
+    return Number(totalScore / data.report.length).toFixed(2)
+  }
+
+  const getScore = () => {
+    const totalScore = data.report?.reduce((n, { overallScore }) => n + overallScore, 0)
+
+    return Number(totalScore / data.report.length).toFixed(2)
+  }
+
   return (
     <Box sx={{ mb: 4, p: 4 }}>
-      <Box className='flex items-center justify-between'>
-        <Typography variant='h4' sx={{ mb: 2 }}>
-          Candidate Name: {data.name}
-        </Typography>
+      <Box className='flex items-center justify-end'>
         <Button
           variant='outlined'
           onClick={() => window.history.back()}
@@ -73,6 +88,21 @@ const EvaluateResult = ({ params: { id } }: { params: { id: string } }) => {
         >
           Go Back
         </Button>
+      </Box>
+      <Divider sx={{ my: 4 }} />
+      <Box className='flex items-center justify-between'>
+        <Typography variant='h4' sx={{ mb: 2 }}>
+          Name: {data.name}
+        </Typography>
+        <Typography variant='h4' sx={{ mb: 2 }}>
+          Total Accuray: {getAccuracy()} %
+        </Typography>
+        <Typography variant='h4' sx={{ mb: 2 }}>
+          Total Completness: {getCompletness()} %
+        </Typography>
+        <Typography variant='h4' sx={{ mb: 2 }}>
+          Total Score: {getScore()} %
+        </Typography>
       </Box>
 
       <Divider sx={{ my: 2 }} />
@@ -89,15 +119,15 @@ const EvaluateResult = ({ params: { id } }: { params: { id: string } }) => {
 
           <Box sx={{ display: 'flex', gap: 2 }}>
             <Typography variant='h6'>Accuracy Score: </Typography>
-            <Typography variant='h6'>{result.accuracyScore}</Typography>
+            <Typography variant='h6'>{result.accuracyScore}%</Typography>
           </Box>
           <Box sx={{ display: 'flex', gap: 2 }}>
             <Typography variant='h6'>Completeness Score: </Typography>
-            <Typography variant='h6'>{result.completenessScore}</Typography>
+            <Typography variant='h6'>{result.completenessScore}%</Typography>
           </Box>
           <Box sx={{ display: 'flex', gap: 2 }}>
             <Typography variant='h6'>Overall Score: </Typography>
-            <Typography variant='h6'>{result.overallScore}</Typography>
+            <Typography variant='h6'>{result.overallScore}%</Typography>
           </Box>
 
           <Box sx={{ display: 'flex', gap: 2 }}>
