@@ -10,16 +10,6 @@ import { toast } from 'react-toastify'
 
 import { apiAnuragGet, apiAnuragPost } from '@/utils/axiosUtils'
 
-const columns: GridColDef[] = [
-  { field: 'jobId', headerName: 'Job ID', width: 70 },
-  { field: 'jobName', headerName: 'Job Name', width: 130 },
-  { field: 'account', headerName: 'Account', width: 130 },
-  { field: 'position', headerName: 'Position', width: 130 },
-  { field: 'experience', headerName: 'Experience', width: 130 },
-  { field: 'manager', headerName: 'Manager', width: 130 },
-  { field: 'skills', headerName: 'Skills', width: 230 }
-]
-
 const SKILLS = [
   { value: 'javascript', label: 'JavaScript' },
   { value: 'java', label: 'Java' },
@@ -83,6 +73,34 @@ const JobForm = () => {
       setSkills([])
     }
   }
+
+  const columns: GridColDef[] = [
+    { field: 'jobId', headerName: 'Job ID', width: 50 },
+    { field: 'jobName', headerName: 'Job Name', width: 130 },
+    { field: 'account', headerName: 'Account', width: 80 },
+    { field: 'position', headerName: 'Position', width: 130 },
+    { field: 'experience', headerName: 'Experience', width: 100 },
+    { field: 'manager', headerName: 'Manager', width: 100 },
+    { field: 'skills', headerName: 'Skills', width: 230 },
+
+    // Action, go to /schedule-interview
+
+    {
+      field: 'action',
+      headerName: 'Action',
+      sortable: false,
+      width: 160,
+      renderCell: () => {
+        const link = window.location.origin + `/schedule-interview`
+
+        return (
+          <Button size={'small'} variant='contained' onClick={() => (window.location.href = link)}>
+            Scedule Interview
+          </Button>
+        )
+      }
+    }
+  ]
 
   return (
     <Paper sx={{ p: 4 }}>

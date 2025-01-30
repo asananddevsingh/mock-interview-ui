@@ -7,17 +7,17 @@ import type { GridColDef } from '@mui/x-data-grid'
 import { DataGrid } from '@mui/x-data-grid'
 import Paper from '@mui/material/Paper'
 
-import { apiLokeshGet } from '@/utils/axiosUtils'
+import { apiAnuragGet } from '@/utils/axiosUtils'
 import QuestionDialog from './QuestionDialog'
 
 const columns: GridColDef[] = [
-  { field: 'Serial Number', headerName: 'Serial Number', width: 70 },
-  { field: 'Technology', headerName: 'Technology', width: 130 },
-  { field: 'Question', headerName: 'Question', width: 130 },
-  { field: 'Answer', headerName: 'Answer', width: 130 },
-  { field: 'Category', headerName: 'Category', width: 130 },
-  { field: 'Difficulty', headerName: 'Difficulty', width: 130 },
-  { field: 'Reference', headerName: 'Reference', width: 130 }
+  { field: 'serialNumber', headerName: 'Serial Number', width: 70 },
+  { field: 'technology', headerName: 'Technology', width: 130 },
+  { field: 'question', headerName: 'Question', width: 130 },
+  { field: 'answer', headerName: 'Answer', width: 130 },
+  { field: 'category', headerName: 'Category', width: 130 },
+  { field: 'difficulty', headerName: 'Difficulty', width: 130 },
+  { field: 'reference', headerName: 'Reference', width: 130 }
 
   // {
   //   field: 'fullName',
@@ -36,20 +36,10 @@ export default function Page() {
   const getKnowledgeBase = async () => {
     setLoading(true)
 
-    const data = await apiLokeshGet('/knowledgebase', {
-      question: 'What is your favorite color?',
-      correct_answer: 'Blue',
-      user_answer: 'Blue'
-    })
+    const data = await apiAnuragGet('/question')
 
-    if (JSON.parse(data.body).data) {
-      const rawData = JSON.parse(data.body).data
-
-      console.log('rawData', rawData)
-
-      const sorted = rawData.sort((a: any, b: any) => a['Serial Number'] - b['Serial Number'])
-
-      console.log('sorted', sorted)
+    if (data?.length) {
+      const sorted = data.sort((a: any, b: any) => b.serialNumber - a.serialNumber)
 
       setKnowledgeBase(sorted)
     }
@@ -74,7 +64,7 @@ export default function Page() {
         pageSizeOptions={[5, 10, 20, 50]}
         sx={{ border: 0 }}
         loading={loading}
-        getRowId={row => row['Serial Number'].toString()}
+        getRowId={row => row?.serialNumber?.toString()}
       />
     </Paper>
   )

@@ -3,56 +3,25 @@ import React, { useEffect, useState } from 'react'
 
 import { Box, Typography, Button, CircularProgress, Divider } from '@mui/material'
 
-const EvaluateResult = () => {
-  const [loading, setLoading] = useState(false)
+import { apiAnuragGet } from '@/utils/axiosUtils'
+import Typewriter from '@/components/Typewriter/Typewriter'
+
+const EvaluateResult = ({ params: { id } }: { params: { id: string } }) => {
+  const [loading, setLoading] = useState(true)
   const [data, setData] = useState<{ name: string; report: any[] }>({ name: '', report: [] })
   const [showMore, setShowMore] = useState<any>({})
+  const [showMoreCurrectAnswer, setShowMoreCurrectAnswer] = useState<any>({})
 
   useEffect(() => {
     const getData = async () => {
-      setLoading(true)
-
-      // const data = await apiAnuragGet('/questions')
-
-      // console.log('data', data)
+      const data = await apiAnuragGet(`/candidate/evaluate/${id}`)
 
       setLoading(false)
-
-      setData({
-        name: 'Anurag Kumar',
-        report: [
-          {
-            serialNumber: 250,
-            technology: 'JavaScript',
-            question: 'Explain closures in JavaScript.',
-            answer:
-              "A closure is a function that has access to its outer function's scope, even after the outer function has finished executing.",
-            userAnswer: 'test test test',
-            accuracyScore: '50%',
-            completenessScore: '40%',
-            overallScore: '45%',
-            feedback:
-              'test test test test test test lorem100 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum eos delectus illum ipsam quisquam inventore maxime, repellat similique voluptatem at autem nisi ex, ipsa reiciendis pariatur sit debitis veniam rerum officia sunt earum quia, ducimus voluptatum hic! Temporibus placeat corporis, officia tenetur nam, error nemo fugiat, perspiciatis vero aliquid eos explicabo optio doloremque hic! Ratione adipisci ipsum accusantium odit tempora deleniti, ipsam aspernatur optio voluptatem ut quos quaerat quisquam sit, perferendis error sint sapiente reprehenderit. Explicabo amet commodi praesentium voluptatem. Necessitatibus quo totam consequuntur vitae? Voluptas vel suscipit molestiae accusamus! Rem saepe inventore, nesciun'
-          },
-          {
-            serialNumber: 251,
-            technology: 'Python',
-            question: "What are Python's key features?",
-            answer:
-              'Python features include dynamic typing, garbage collection, support for multiple programming paradigms, and extensive libraries.',
-            userAnswer: 'test test test',
-            accuracyScore: '30%',
-            completeness_score: '50%',
-            overall_score: '40%',
-            feedback:
-              'test test test lorem100 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum eos delectus illum ipsam quisquam inventore maxime, repellat similique voluptatem at autem nisi ex, ipsa reiciendis pariatur sit debitis veniam rerum officia sunt earum quia, ducimus voluptatum hic! Temporibus placeat corporis, officia tenetur nam, error nemo fugiat, perspiciatis vero aliquid eos explicabo optio doloremque hic! Ratione adipisci ipsum accusantium odit tempora deleniti, ipsam aspernatur optio voluptatem ut quos quaerat quisquam sit, perferendis error sint sapiente reprehenderit. Explicabo amet commodi praesentium voluptatem. Necessitatibus quo totam consequuntur vitae? Voluptas vel suscipit molestiae accusamus! Rem saepe inventore, nesciun'
-          }
-        ]
-      })
+      setData(data)
     }
 
     getData()
-  }, [])
+  }, [id])
 
   const handleShowMore = (id: any) => {
     setShowMore((prevShowMore: any) => ({
@@ -61,7 +30,14 @@ const EvaluateResult = () => {
     }))
   }
 
-  if (loading || !data?.report?.length) {
+  const handleShowMoreCurrectAnswer = (id: any) => {
+    setShowMoreCurrectAnswer((prevShowMore: any) => ({
+      ...prevShowMore,
+      [id]: !prevShowMore[id]
+    }))
+  }
+
+  if (loading) {
     return (
       <Box className='flex items-center justify-center h-full w-full'>
         <CircularProgress size={80} />
@@ -69,12 +45,34 @@ const EvaluateResult = () => {
     )
   }
 
+  if (!loading && data?.report?.length === 0) {
+    return (
+      <Box className='flex flex-col items-center justify-center  gap-4 w-full'>
+        <Button
+          variant='outlined'
+          onClick={() => window.history.back()}
+          startIcon={<i className='bx bx-left-arrow-alt' />}
+        >
+          Go Back
+        </Button>
+        <Typewriter text='Candidate yet not taken the test.' />
+      </Box>
+    )
+  }
+
   return (
     <Box sx={{ mb: 4, p: 4 }}>
-      <Box className='flex items-center'>
+      <Box className='flex items-center justify-between'>
         <Typography variant='h4' sx={{ mb: 2 }}>
           Candidate Name: {data.name}
         </Typography>
+        <Button
+          variant='outlined'
+          onClick={() => window.history.back()}
+          startIcon={<i className='bx bx-left-arrow-alt' />}
+        >
+          Go Back
+        </Button>
       </Box>
 
       <Divider sx={{ my: 2 }} />
@@ -113,6 +111,21 @@ const EvaluateResult = () => {
             {result.feedback.length > 100 && (
               <Button variant='text' onClick={() => handleShowMore(result.serialNumber)}>
                 {showMore[result.serialNumber] ? 'Show Less' : 'Show More'}
+              </Button>
+            )}
+          </Box>
+
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <Typography variant='h6'>Correct Answer: </Typography>
+            <Typography variant='h6'>
+              {showMoreCurrectAnswer[result.serialNumber] ? result.answer : result.answer.substring(0, 100) + '...'}
+            </Typography>
+          </Box>
+
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            {result.feedback.length > 100 && (
+              <Button variant='text' onClick={() => handleShowMoreCurrectAnswer(result.serialNumber)}>
+                {showMoreCurrectAnswer[result.serialNumber] ? 'Show Less' : 'Show More'}
               </Button>
             )}
           </Box>

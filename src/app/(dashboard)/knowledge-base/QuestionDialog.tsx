@@ -13,7 +13,9 @@ import {
   FormLabel
 } from '@mui/material'
 
-import { apiLokeshPost } from '@/utils/axiosUtils'
+import { toast } from 'react-toastify'
+
+import { apiAnuragPost } from '@/utils/axiosUtils'
 
 interface QuestionFormValues {
   technology: string
@@ -49,21 +51,33 @@ const QuestionDialog = (props: { seqNum: number }) => {
   }
 
   const handleSubmit = async () => {
-    console.log('Values:', values)
-
     const payload = {
-      'Serial Number': props.seqNum,
-      Technology: values.technology,
-      Question: values.question,
-      Answer: values.answer,
-      Category: values.category,
-      Difficulty: values.difficulty,
-      Reference: values.reference
+      serialNumber: props.seqNum,
+      technology: values.technology,
+      question: values.question,
+      answer: values.answer,
+      category: values.category,
+      difficulty: values.difficulty,
+      reference: values.reference
     }
 
-    const response = await apiLokeshPost('/addquestion', { newObject: payload })
+    const response = await apiAnuragPost('/question', { newObject: payload })
 
-    console.log('response', response)
+    if (response) {
+      toast.success('Question added successfully')
+
+      //clear fileds.
+      setValues({
+        technology: '',
+        question: '',
+        answer: '',
+        category: '',
+        difficulty: 'Easy',
+        reference: ''
+      })
+    } else {
+      toast.error('Something went wrong. Please try again.')
+    }
   }
 
   return (

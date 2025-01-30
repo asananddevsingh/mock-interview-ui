@@ -3,12 +3,16 @@ import React, { useEffect, useState } from 'react'
 
 import { Box, Typography, TextField, Button, CircularProgress } from '@mui/material'
 
+import { toast } from 'react-toastify'
+
 import Typewriter from '@/components/Typewriter/Typewriter'
+import { apiAnuragPost } from '@/utils/axiosUtils'
 
 const EvaluateCandidate = ({ params: { id } }: { params: { id: string } }) => {
   console.log('id', id)
 
   const [loading, setLoading] = useState(false)
+  const [loadingNext, setLoadingNext] = useState(false)
   const [questions, setQuestions] = useState<any[]>([])
 
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -30,19 +34,30 @@ const EvaluateCandidate = ({ params: { id } }: { params: { id: string } }) => {
           serialNumber: 1,
           technology: 'JavaScript',
           question: 'What is JavaScript?',
-          answer: ''
+          answer: 'JavaScript is a high-level, interpreted programming language used to make web pages interactive.',
+          category: 'Basics',
+          difficulty: 'Easy',
+          reference: 'MDN Web Docs'
         },
         {
-          serialNumber: 2,
+          serialNumber: 124,
           technology: 'JavaScript',
           question: 'Explain closures in JavaScript.',
-          answer: ''
+          answer:
+            "A closure is a function that has access to its outer function's scope, even after the outer function has finished executing.",
+          category: 'Functions',
+          difficulty: 'Medium',
+          reference: 'MDN Web Docs'
         },
         {
-          serialNumber: 3,
+          serialNumber: 125,
           technology: 'JavaScript',
           question: 'What are promises in JavaScript?',
-          answer: ''
+          answer:
+            'Promises are objects that represent the eventual completion or failure of an asynchronous operation and its resulting value.',
+          category: 'Asynchronous',
+          difficulty: 'Medium',
+          reference: 'JavaScript.info'
         }
       ])
     }
@@ -58,14 +73,27 @@ const EvaluateCandidate = ({ params: { id } }: { params: { id: string } }) => {
     setAnswers(newAnswers)
   }
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault()
+    setLoadingNext(true)
 
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1)
+    const resp = await apiAnuragPost('/candidate/answer', {
+      candidateId: Number(id),
+      serialNumber: questions[currentQuestion].serialNumber,
+      userAnswer: answers[currentQuestion]
+    })
+
+    if (resp === 'success') {
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(currentQuestion + 1)
+      } else {
+        setSubmitted(true)
+      }
     } else {
-      setSubmitted(true)
+      toast.error('Something went wrong. Please try again.')
     }
+
+    setLoadingNext(false)
   }
 
   if (submitted) {
@@ -110,8 +138,8 @@ const EvaluateCandidate = ({ params: { id } }: { params: { id: string } }) => {
           />
         </Box>
         <Box sx={{ mb: 2, display: 'flex', justifyContent: 'flex-end' }}>
-          <Button variant='contained' type='submit' disabled={!answers[currentQuestion]}>
-            Submit
+          <Button variant='contained' type='submit' disabled={!answers[currentQuestion] || loadingNext}>
+            {loadingNext ? 'Submiting...' : `Submit ${currentQuestion + 1} of ${questions.length}`}
           </Button>
         </Box>
       </form>

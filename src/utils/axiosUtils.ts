@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 //-================= Lokesh
 const apiLokesh = axios.create({
@@ -50,7 +51,9 @@ export const requestAnurag = async (method: string, url: string, data?: any, con
 
     return response.data
   } catch (error) {
-    throw error
+    toast.error('Something went wrong. Please try again.')
+
+    // throw error
   }
 }
 
