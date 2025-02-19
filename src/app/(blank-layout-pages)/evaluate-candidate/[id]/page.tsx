@@ -25,47 +25,11 @@ const EvaluateCandidate = ({ params: { id } }: { params: { id: string } }) => {
 
       const data = await apiAnuragGet(`/question/byJob/${id}`)
 
-      console.log('data', data)
-
       if (data) {
         setQuestions(data)
       }
 
-      // console.log('data', data)
-
       setLoading(false)
-
-      // setQuestions([
-      //   {
-      //     serialNumber: 1,
-      //     technology: 'JavaScript',
-      //     question: 'What is JavaScript?',
-      //     answer: 'JavaScript is a high-level, interpreted programming language used to make web pages interactive.',
-      //     category: 'Basics',
-      //     difficulty: 'Easy',
-      //     reference: 'MDN Web Docs'
-      //   },
-      //   {
-      //     serialNumber: 124,
-      //     technology: 'JavaScript',
-      //     question: 'Explain closures in JavaScript.',
-      //     answer:
-      //       "A closure is a function that has access to its outer function's scope, even after the outer function has finished executing.",
-      //     category: 'Functions',
-      //     difficulty: 'Medium',
-      //     reference: 'MDN Web Docs'
-      //   },
-      //   {
-      //     serialNumber: 125,
-      //     technology: 'JavaScript',
-      //     question: 'What are promises in JavaScript?',
-      //     answer:
-      //       'Promises are objects that represent the eventual completion or failure of an asynchronous operation and its resulting value.',
-      //     category: 'Asynchronous',
-      //     difficulty: 'Medium',
-      //     reference: 'JavaScript.info'
-      //   }
-      // ])
     }
 
     getData()
