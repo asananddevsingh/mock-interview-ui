@@ -1,15 +1,29 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 import React, { useEffect, useState } from 'react'
 
-import { Box, Typography, TextField, Button, CircularProgress } from '@mui/material'
+import { Box, Typography, TextField, Button, CircularProgress, Alert } from '@mui/material'
 
 import { toast } from 'react-toastify'
+
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 
 import Typewriter from '@/components/Typewriter/Typewriter'
 import { apiAnuragGet, apiAnuragPost } from '@/utils/axiosUtils'
 
+// import useWebcamScreenshotInterval from '@/@core/hooks/useWebcamScreenshotInterval'
+
 const EvaluateCandidate = ({ params: { id } }: { params: { id: string } }) => {
-  console.log('id', id)
+  const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition()
+
+  // const screenshots = useWebcamScreenshotInterval({ duration: 10000 })
+
+  // console.log('screenshots', screenshots)
+
+  // useEffect(() => {
+  // console.log('screenshots', screenshots)
+  // const imgSrc = URL.createObjectURL(screenshots[0])
+  // }, [screenshots])
 
   const [loading, setLoading] = useState(true)
   const [loadingNext, setLoadingNext] = useState(false)
@@ -35,6 +49,16 @@ const EvaluateCandidate = ({ params: { id } }: { params: { id: string } }) => {
     getData()
   }, [id])
 
+  useEffect(() => {
+    if (listening) {
+      const newAnswers = { ...answers }
+
+      newAnswers[currentQuestion] = transcript
+
+      setAnswers(newAnswers)
+    }
+  }, [listening, transcript])
+
   const handleAnswerChange = (event: any) => {
     const newAnswers = { ...answers }
 
@@ -46,14 +70,16 @@ const EvaluateCandidate = ({ params: { id } }: { params: { id: string } }) => {
   const handleSubmit = async (event: any) => {
     event.preventDefault()
     setLoadingNext(true)
+    SpeechRecognition.stopListening()
+    resetTranscript()
 
-    const resp = await apiAnuragPost('/candidate/answer', {
+    const resp = await apiAnuragPost('/--candidate/answer', {
       candidateId: Number(id),
       serialNumber: questions[currentQuestion].serialNumber,
       userAnswer: answers[currentQuestion]
     })
 
-    if (resp === 'success') {
+    if (resp !== 'success') {
       if (currentQuestion < questions.length - 1) {
         setCurrentQuestion(currentQuestion + 1)
       } else {
@@ -112,14 +138,37 @@ const EvaluateCandidate = ({ params: { id } }: { params: { id: string } }) => {
           <TextField
             autoFocus
             multiline
-            rows={4}
+            minRows={4}
             fullWidth
             value={answers[currentQuestion] || ''}
             onChange={handleAnswerChange}
+            placeholder='Start speaking or type your answer here...'
           />
         </Box>
-        <Box sx={{ mb: 2, display: 'flex', justifyContent: 'flex-end' }}>
-          <Button variant='contained' type='submit' disabled={!answers[currentQuestion] || loadingNext}>
+        <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <Button
+              disabled={!browserSupportsSpeechRecognition || loadingNext}
+              color={listening ? 'error' : 'primary'}
+              onClick={() => {
+                if (listening) {
+                  SpeechRecognition.stopListening()
+                } else {
+                  SpeechRecognition.startListening({ continuous: true })
+                }
+              }}
+            >
+              {listening ? 'Stop Speaking' : 'Start Speaking'}
+            </Button>
+            <Box>
+              {!browserSupportsSpeechRecognition && (
+                <Alert severity='warning' sx={{ p: 1 }}>
+                  Your browser do not supports speech recognition
+                </Alert>
+              )}
+            </Box>
+          </Box>
+          <Button color='success' type='submit' disabled={!answers[currentQuestion] || loadingNext || listening}>
             {loadingNext ? 'Submiting...' : `Submit ${currentQuestion + 1} of ${questions.length}`}
           </Button>
         </Box>
