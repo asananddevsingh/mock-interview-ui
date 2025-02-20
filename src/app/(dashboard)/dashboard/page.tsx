@@ -121,8 +121,6 @@ const DashboardPage = () => {
     getGridData()
   }, [])
 
-  // const totalJobCount = data.reduce((acc, current) => acc + current.jobCount, 0);
-
   if (loading) {
     return (
       <Box className='flex items-center justify-center h-full w-full'>
@@ -184,7 +182,9 @@ const DashboardPage = () => {
           src='/images/illustrations/characters/10.png'
         />
       </Grid>
-
+      <Grid item xs={12}>
+        <Typography variant='h5'>Knowledge Base</Typography>
+      </Grid>
       {rowData?.questions?.map((item, index) => {
         const iconDetails = skillsIcons?.find(s => s.language === item.technology?.toLowerCase())
 
@@ -201,6 +201,9 @@ const DashboardPage = () => {
           </Grid>
         )
       })}
+      <Grid item xs={12}>
+        <Typography variant='h5'>Candidates Insight</Typography>
+      </Grid>
       <Grid item xs={7} className='self-end'>
         <Card>
           <CardHeader
