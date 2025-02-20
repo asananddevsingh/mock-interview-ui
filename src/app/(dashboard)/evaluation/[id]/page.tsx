@@ -89,19 +89,22 @@ const EvaluateResult = ({ params: { id } }: { params: { id: string } }) => {
           Go Back
         </Button>
       </Box>
+      <Typography variant='h4' color={'primary'}>
+        Candidate Evaluation Report
+      </Typography>
       <Divider sx={{ my: 4 }} />
       <Box className='flex items-center justify-between'>
-        <Typography variant='h4' sx={{ mb: 2 }}>
-          Name: {data.name}
+        <Typography variant='h5' sx={{ mb: 2 }}>
+          Name: <strong>{data.name}</strong>
         </Typography>
-        <Typography variant='h4' sx={{ mb: 2 }}>
-          Total Accuray: {getAccuracy()} %
+        <Typography variant='h5' sx={{ mb: 2 }}>
+          Accuray: <strong>{getAccuracy()} %</strong>
         </Typography>
-        <Typography variant='h4' sx={{ mb: 2 }}>
-          Total Completness: {getCompletness()} %
+        <Typography variant='h5' sx={{ mb: 2 }}>
+          Completness: <strong>{getCompletness()} %</strong>
         </Typography>
-        <Typography variant='h4' sx={{ mb: 2 }}>
-          Total Score: {getScore()} %
+        <Typography variant='h5' sx={{ mb: 2 }}>
+          Score: <strong>{getScore()} %</strong>
         </Typography>
       </Box>
 

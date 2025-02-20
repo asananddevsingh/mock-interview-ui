@@ -204,15 +204,10 @@ const DashboardPage = () => {
       <Grid item xs={7} className='self-end'>
         <Card>
           <CardHeader
-            title='Candidates'
+            title='Candidates By JD'
             action={<OptionMenu iconClassName='text-textPrimary' options={['Refresh', 'Details', 'Hide Card']} />}
-            subheader={
-              <>
-                <span className='font-medium text-textPrimary'>candidates based on unique skills</span>{' '}
-                {/* <Chip label={`Year of ${new Date().getFullYear()}`} color={'success'} variant='tonal' size='small' /> */}
-              </>
-            }
           />
+
           <CardContent>
             <Grid container spacing={2}>
               {rowData?.candidates?.map((item, index) => (
@@ -246,19 +241,25 @@ const DashboardPage = () => {
           />
           <CardContent>
             <Grid container spacing={2}>
-              {rowData?.interviewResult?.map((item, index) => (
-                <Grid item xs={12} sm={4} key={index}>
-                  <div className='flex items-center gap-3'>
-                    <CustomAvatar variant='rounded' color={sbuIcons[index]['color'] as any} className='shadow-xs'>
-                      <i className={sbuIcons[index]['icon']}></i>
-                    </CustomAvatar>
-                    <div>
-                      <Typography>{item.status}</Typography>
-                      <Typography variant='h5'>{item.candidateCount}</Typography>
+              {rowData?.interviewResult?.map((item, index) => {
+                const totalCOunt = rowData?.interviewResult?.reduce((prev, curr) => prev + curr.candidateCount, 0)
+
+                return (
+                  <Grid item xs={12} sm={4} key={index}>
+                    <div className='flex items-center gap-3'>
+                      <CustomAvatar variant='rounded' color={sbuIcons[index]['color'] as any} className='shadow-xs'>
+                        <i className={sbuIcons[index]['icon']}></i>
+                      </CustomAvatar>
+                      <div>
+                        <Typography>{item.status === 'unAttempted' ? 'New' : item.status}</Typography>
+                        <Typography variant='h5'>
+                          {item.candidateCount}/{totalCOunt}
+                        </Typography>
+                      </div>
                     </div>
-                  </div>
-                </Grid>
-              ))}
+                  </Grid>
+                )
+              })}
             </Grid>
           </CardContent>
         </Card>
