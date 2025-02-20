@@ -73,6 +73,9 @@ const sources: BundleScriptConfig = {
     // carbon
     require.resolve('@iconify/json/json/carbon.json'),
 
+    //mdi:language-python
+    require.resolve('@iconify/json/json/mdi.json'),
+
     // Custom file with only few icons
     {
       filename: require.resolve('@iconify/json/json/line-md.json'),

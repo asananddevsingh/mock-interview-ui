@@ -1,3 +1,6 @@
+'use client'
+import 'regenerator-runtime/runtime'
+
 // Third-party Imports
 import 'react-perfect-scrollbar/dist/css/styles.css'
 
@@ -9,11 +12,6 @@ import '@/app/globals.css'
 
 // Generated Icon CSS Imports
 import '@assets/iconify-icons/generated-icons.css'
-
-export const metadata = {
-  title: 'Mock Interview',
-  description: 'Mock Interview'
-}
 
 const RootLayout = ({ children }: ChildrenType) => {
   // Vars
