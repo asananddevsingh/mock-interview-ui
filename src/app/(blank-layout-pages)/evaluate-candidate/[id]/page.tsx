@@ -73,13 +73,15 @@ const EvaluateCandidate = ({ params: { id } }: { params: { id: string } }) => {
     SpeechRecognition.stopListening()
     resetTranscript()
 
-    const resp = await apiAnuragPost('/--candidate/answer', {
+    const resp = await apiAnuragPost('/candidate/answer', {
       candidateId: Number(id),
       serialNumber: questions[currentQuestion].serialNumber,
       userAnswer: answers[currentQuestion]
     })
 
-    if (resp !== 'success') {
+    console.log('resp', resp)
+
+    if (resp === 'success') {
       if (currentQuestion < questions.length - 1) {
         setCurrentQuestion(currentQuestion + 1)
       } else {
